@@ -1,16 +1,31 @@
-# React + Vite
+# Healthcare AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Healthcare AI is a responsive React frontend connected to a Spring Boot API. Authentication, doctor listings, appointment booking, reports, and dashboard data use the backend when available. Dashboard, appointment, and report screens show mock data with a notice when those services are unavailable.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Configure the backend URL in `.env` (defaults to `http://localhost:1234`), then start the frontend:
 
-## React Compiler
+```sh
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+`.env.example` contains the expected frontend configuration. Restart Vite after changing environment variables.
 
-## Expanding the Oxlint configuration
+## Available checks
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```sh
+npm run lint
+npm run build
+```
+
+## API integration notes
+
+- The frontend expects the auth response fields `token`, `userId`, `name`, `email`, and `role`.
+- Doctor list responses may be an array or `{ "data": [] }`.
+- Patient and doctor registration use separate endpoints. Doctor registrations remain hidden from the public directory and cannot log in until an administrator approves them.
+- The backend creates `admin@docai.com` once when `APP_ADMIN_PASSWORD` is configured; the password is stored as BCrypt. Sign in at `/admin/login`. In Eclipse, open **Run Configurations → Java Application → DocAiApplication → Environment**, add `APP_ADMIN_EMAIL` (or leave it unset for the default email) and `APP_ADMIN_PASSWORD`, then restart the backend. Do not commit administrator credentials.
+- TODO comments mark appointment, report, and dashboard field mappings that need confirmation against the backend Swagger/DTOs.
+- Medical history and AI analysis service methods are available; their UI integrations await confirmed request and response schemas.
+- Do not enter real patient information in demo fallback paths.
